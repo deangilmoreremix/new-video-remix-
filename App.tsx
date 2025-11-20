@@ -364,11 +364,18 @@ const App: React.FC = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [authError, setAuthError] = useState('');
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   useEffect(() => {
     checkKey();
     const currentUser = authService.getCurrentUser();
     setUser(currentUser);
+
+    // Check if demo mode flag is set in localStorage
+    const demoFlag = localStorage.getItem('lumina_demo_mode');
+    if (demoFlag === 'true') {
+      setIsDemoMode(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -392,7 +399,8 @@ const App: React.FC = () => {
   };
 
   const handleToolClick = (tool: ToolConfig) => {
-    if (tool.isFree) {
+    // Allow all tools in demo mode or if free
+    if (tool.isFree || isDemoMode) {
         setActiveTool(tool);
         setView('workspace');
         return;
@@ -433,6 +441,19 @@ const App: React.FC = () => {
   const handleLogout = () => {
     authService.logout();
     setUser(null);
+    setView('dashboard');
+    setActiveTool(null);
+  };
+
+  const handleDemoMode = () => {
+    setIsDemoMode(true);
+    localStorage.setItem('lumina_demo_mode', 'true');
+    setShowAuthModal(false);
+  };
+
+  const exitDemoMode = () => {
+    setIsDemoMode(false);
+    localStorage.removeItem('lumina_demo_mode');
     setView('dashboard');
     setActiveTool(null);
   };
@@ -479,7 +500,8 @@ const App: React.FC = () => {
             setResult({ type: 'video', url: url });
             // Stop stream tracks
             stream.getTracks().forEach(track => track.stop());
-            if (user && activeTool) {
+            // Save assets only for logged-in users (not demo mode)
+            if (user && !isDemoMode && activeTool) {
                 assetService.saveAsset(user.id, { type: 'video', url }, activeTool.id, activeTool.title);
             }
         };
@@ -578,7 +600,8 @@ const App: React.FC = () => {
 
       if (generatedData) {
         setResult(generatedData);
-        if (user) {
+        // Save assets only for logged-in users (not demo mode)
+        if (user && !isDemoMode) {
             assetService.saveAsset(user.id, generatedData, activeTool.id, activeTool.title);
         }
       }
@@ -701,7 +724,19 @@ const App: React.FC = () => {
                 {hasKey ? "API Key Active" : "Connect Google AI"}
              </button>
 
-            {user ? (
+            {isDemoMode ? (
+                <div className="flex items-center gap-3">
+                    <span className="text-xs font-medium px-3 py-1.5 rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/30">
+                        Demo Mode - All Features Unlocked
+                    </span>
+                    <button
+                        onClick={exitDemoMode}
+                        className="text-xs text-gray-400 hover:text-white"
+                    >
+                        Exit Demo
+                    </button>
+                </div>
+            ) : user ? (
                 <div className="flex items-center gap-4">
                     <button onClick={() => setView('assets')} className={`text-sm font-medium ${view === 'assets' ? 'text-brand-500' : 'text-gray-300 hover:text-white'}`}>
                         My Assets
@@ -717,7 +752,7 @@ const App: React.FC = () => {
                     </div>
                 </div>
             ) : (
-                <button 
+                <button
                     onClick={() => setShowAuthModal(true)}
                     className="px-5 py-2 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition-colors"
                 >
@@ -737,11 +772,11 @@ const App: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {TOOLS.map((tool) => (
-                <ToolCard 
-                    key={tool.id} 
-                    tool={tool} 
+                <ToolCard
+                    key={tool.id}
+                    tool={tool}
                     onClick={handleToolClick}
-                    isLocked={!tool.isFree && (!user || !user.purchasedTools.includes(tool.id))}
+                    isLocked={!tool.isFree && !isDemoMode && (!user || !user.purchasedTools.includes(tool.id))}
                 />
               ))}
             </div>
@@ -1171,13 +1206,23 @@ const App: React.FC = () => {
                     </button>
                 </form>
 
-                <div className="mt-6 text-center">
-                    <button 
+                <div className="mt-6 text-center space-y-3">
+                    <button
                         onClick={() => { setAuthMode(authMode === 'login' ? 'signup' : 'login'); setAuthError(''); }}
                         className="text-sm text-gray-400 hover:text-white underline"
                     >
                         {authMode === 'login' ? "Don't have an account? Sign up" : "Already have an account? Log in"}
                     </button>
+                    <div className="pt-4 border-t border-gray-700">
+                        <button
+                            onClick={handleDemoMode}
+                            className="w-full py-3 bg-gray-800 hover:bg-gray-700 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-colors"
+                        >
+                            <Icons.Play className="w-4 h-4" />
+                            Try Demo Mode (No Login Required)
+                        </button>
+                        <p className="text-xs text-gray-500 mt-2">Full access to all features for testing</p>
+                    </div>
                 </div>
                 <button onClick={() => setShowAuthModal(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white">
                     <Icons.X size={20} />
