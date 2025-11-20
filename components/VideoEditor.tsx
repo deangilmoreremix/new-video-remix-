@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Player } from '@remotion/player';
 import { Timeline } from './Timeline';
 import { ToolConfig, ToolCategory, GeneratedContent, TimelineClip, User } from '../types';
 import { geminiService } from '../services/geminiService';
 import { assetService } from '../services/assetService';
 import * as Icons from 'lucide-react';
+import { MyComposition } from '../remotion/Composition';
 
 interface VideoEditorProps {
   user: User | null;
@@ -111,8 +113,6 @@ const AI_FEATURES: ToolConfig[] = [
 
 export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) => {
   const [timelineClips, setTimelineClips] = useState<TimelineClip[]>([]);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [selectedFeature, setSelectedFeature] = useState<ToolConfig | null>(null);
   const [prompt, setPrompt] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -127,9 +127,8 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
-  // Playback
-  const requestRef = useRef<number>();
-  const startTimeRef = useRef<number>();
+  // Remotion Player
+  const playerRef = useRef<any>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -250,47 +249,11 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
     setTimelineClips(timelineClips.filter(c => c.id !== id));
   };
 
-  const animate = (time: number) => {
-    if (!startTimeRef.current) startTimeRef.current = time;
+  const totalDuration = timelineClips.length > 0
+    ? Math.max(...timelineClips.map(c => c.startOffset + c.duration))
+    : 30;
 
-    setCurrentTime(prev => {
-      const next = prev + 0.016;
-      const maxDuration = timelineClips.length > 0 ? Math.max(...timelineClips.map(c => c.startOffset + c.duration)) : 10;
-      if (next >= maxDuration) {
-        setIsPlaying(false);
-        return 0;
-      }
-      return next;
-    });
-
-    if (isPlaying) {
-      requestRef.current = requestAnimationFrame(animate);
-    }
-  };
-
-  useEffect(() => {
-    if (isPlaying) {
-      startTimeRef.current = undefined;
-      requestRef.current = requestAnimationFrame(animate);
-    } else {
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-    }
-    return () => {
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-    };
-  }, [isPlaying]);
-
-  const activeVideoClip = timelineClips.find(c =>
-    c.trackId === 1 &&
-    currentTime >= c.startOffset &&
-    currentTime < c.startOffset + c.duration
-  );
-
-  const activeOverlayClip = timelineClips.find(c =>
-    c.trackId === 2 &&
-    currentTime >= c.startOffset &&
-    currentTime < c.startOffset + c.duration
-  );
+  const durationInFrames = Math.ceil(totalDuration * 30);
 
   return (
     <div className="flex h-full gap-4">
@@ -336,25 +299,38 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
       <div className="flex-1 flex flex-col gap-4">
         {/* Top Section - Preview & Controls */}
         <div className="flex gap-4 h-2/3">
-          {/* Video Preview */}
+          {/* Video Preview with Remotion Player */}
           <div className="flex-1 bg-black rounded-xl relative overflow-hidden flex items-center justify-center border border-gray-800">
-            {activeVideoClip ? (
-              <video
-                src={activeVideoClip.url}
-                className="h-full w-full object-contain"
-                key={activeVideoClip.id}
-                autoPlay={isPlaying}
+            {timelineClips.length > 0 ? (
+              <Player
+                ref={playerRef}
+                component={MyComposition}
+                inputProps={{
+                  clips: timelineClips.map(clip => ({
+                    id: clip.id,
+                    type: clip.type,
+                    url: clip.url,
+                    startOffset: clip.startOffset,
+                    duration: clip.duration,
+                    trackId: clip.trackId,
+                    name: clip.name,
+                  })),
+                }}
+                durationInFrames={durationInFrames}
+                fps={30}
+                compositionWidth={1920}
+                compositionHeight={1080}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+                controls
+                loop
               />
             ) : (
               <div className="text-gray-700 font-mono text-center">
                 <Icons.Film className="w-16 h-16 mx-auto mb-2 opacity-20" />
-                <p>{timelineClips.length === 0 ? 'Add clips to timeline' : 'Preview'}</p>
-              </div>
-            )}
-
-            {activeOverlayClip && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <img src={activeOverlayClip.url} className="max-h-3/4 max-w-3/4 object-contain shadow-xl" alt="Overlay" />
+                <p>Add clips to timeline to preview</p>
               </div>
             )}
           </div>
@@ -531,11 +507,11 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
         <div className="h-1/3 rounded-xl overflow-hidden border border-gray-800">
           <Timeline
             clips={timelineClips}
-            currentTime={currentTime}
-            duration={Math.max(30, ...timelineClips.map(c => c.startOffset + c.duration))}
-            isPlaying={isPlaying}
-            onSeek={(t) => setCurrentTime(t)}
-            onPlayPause={() => setIsPlaying(!isPlaying)}
+            currentTime={0}
+            duration={totalDuration}
+            isPlaying={false}
+            onSeek={() => {}}
+            onPlayPause={() => {}}
             onDeleteClip={deleteTimelineClip}
           />
         </div>
