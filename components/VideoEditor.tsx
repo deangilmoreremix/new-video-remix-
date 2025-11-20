@@ -295,9 +295,9 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
   return (
     <div className="flex h-full gap-4">
       {/* Left Sidebar - AI Tools */}
-      <div className="w-72 bg-gray-900 border border-gray-800 rounded-xl p-4 overflow-y-auto">
-        <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-          <Icons.Sparkles className="w-5 h-5 text-brand-500" />
+      <div className="w-72 flex-shrink-0 bg-gray-900 border border-gray-800 rounded-xl p-4 overflow-y-auto">
+        <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
+          <Icons.Sparkles className="w-5 h-5 text-blue-500" />
           AI Tools
         </h3>
         <div className="space-y-2">
@@ -315,12 +315,12 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
                 }}
                 className={`w-full text-left p-3 rounded-lg transition-all ${
                   selectedFeature?.id === feature.id
-                    ? 'bg-brand-600 text-white'
-                    : 'bg-gray-800 hover:bg-gray-750 text-gray-300'
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <IconComponent className="w-5 h-5" />
+                  <IconComponent className="w-5 h-5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm truncate">{feature.title}</p>
                     <p className="text-xs opacity-70 truncate">{feature.description}</p>
