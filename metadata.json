@@ -1,0 +1,8 @@
+{
+  "name": "Lumina AI Creative Suite",
+  "description": "A professional suite of AI-powered media tools for image editing, video generation, and creative enhancement.",
+  "requestFramePermissions": [
+    "microphone",
+    "geolocation"
+  ]
+}
