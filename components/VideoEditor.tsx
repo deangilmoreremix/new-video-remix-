@@ -113,7 +113,7 @@ const AI_FEATURES: ToolConfig[] = [
 
 export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) => {
   const [timelineClips, setTimelineClips] = useState<TimelineClip[]>([]);
-  const [selectedFeature, setSelectedFeature] = useState<ToolConfig | null>(null);
+  const [selectedFeature, setSelectedFeature] = useState<ToolConfig | null>(AI_FEATURES[0]);
   const [prompt, setPrompt] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -129,6 +129,11 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
 
   // Remotion Player
   const playerRef = useRef<any>(null);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('Selected feature:', selectedFeature?.title || 'None');
+  }, [selectedFeature]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -276,6 +281,7 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
               <button
                 key={feature.id}
                 onClick={() => {
+                  console.log('Feature clicked:', feature.title);
                   setSelectedFeature(feature);
                   setPrompt('');
                   setSelectedFile(null);
@@ -342,13 +348,13 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
           </div>
 
           {/* Right Panel - Tool Controls */}
-          <div className="w-96 bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-y-auto">
+          <div className="w-96 flex-shrink-0 bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-y-auto">
             {selectedFeature ? (
               <div className="space-y-4">
                 <div className="flex items-center gap-3 pb-4 border-b border-gray-800">
-                  {React.createElement((Icons as any)[selectedFeature.icon], { className: 'w-6 h-6 text-brand-500' })}
+                  {React.createElement((Icons as any)[selectedFeature.icon], { className: 'w-6 h-6 text-blue-500' })}
                   <div>
-                    <h3 className="font-bold">{selectedFeature.title}</h3>
+                    <h3 className="font-bold text-white">{selectedFeature.title}</h3>
                     <p className="text-xs text-gray-400">{selectedFeature.description}</p>
                   </div>
                 </div>
