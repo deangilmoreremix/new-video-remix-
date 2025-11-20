@@ -11,17 +11,14 @@ export enum ToolCategory {
 export interface ToolConfig {
   id: string;
   title: string;
-  price: string;
-  priceValue: number; // Numeric value for logic
   icon: string;
   category: ToolCategory;
   description: string;
   modelTarget: 'imagen' | 'flash-image-edit' | 'veo' | 'pro-analysis' | 'tts' | 'search-maps' | 'flash-lite' | 'recorder';
-  defaultPrompt?: string; 
+  defaultPrompt?: string;
   requiresImageInput?: boolean;
   requiresTextInput?: boolean;
   aspectRatioOption?: boolean;
-  isFree?: boolean;
   acceptedFileTypes?: string; // e.g., "image/*, video/*"
   presetOptions?: string[]; // For generic dropdowns
 }
@@ -37,7 +34,6 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  purchasedTools: string[]; // List of Tool IDs
 }
 
 export interface Asset {

@@ -14,8 +14,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'videoremix-editor',
     title: 'VideoRemix Editor',
-    price: '$197/YEAR',
-    priceValue: 197,
     icon: 'Clapperboard',
     category: ToolCategory.VIDEO,
     description: 'Unbranded video editor with AI-powered transitions and effects.',
@@ -27,8 +25,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'neural-voice',
     title: 'Neural Voice Studio',
-    price: '$197/YEAR',
-    priceValue: 197,
     icon: 'Mic2',
     category: ToolCategory.AUDIO,
     description: '36 Neural Smart Speech Speakers in 6 Languages.',
@@ -39,8 +35,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'smart-personalizer',
     title: 'Smart Personalizer',
-    price: '$197/YEAR',
-    priceValue: 197,
     icon: 'UserCheck',
     category: ToolCategory.MARKETING,
     description: 'Geo, Image, and Email personalization for your campaigns.',
@@ -53,8 +47,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'lead-hunter',
     title: 'Lead Hunter & CRM',
-    price: '$197/YEAR',
-    priceValue: 197,
     icon: 'Target',
     category: ToolCategory.MARKETING,
     description: 'Find leads and organize them with Smart CRM technology.',
@@ -65,19 +57,14 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'studio-recorder',
     title: 'Studio Recorder',
-    price: '$197/YEAR',
-    priceValue: 197,
     icon: 'Video',
     category: ToolCategory.VIDEO,
     description: 'Webcam, Screen, and Audio recorder for content creation.',
     modelTarget: 'recorder',
-    isFree: false
   },
   {
     id: 'video-wrapper',
     title: 'Video Wrapper',
-    price: '$197/YEAR',
-    priceValue: 197,
     icon: 'BoxSelect',
     category: ToolCategory.VIDEO,
     description: 'Create engaging wrappers and frames for your social videos.',
@@ -91,8 +78,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'bg-remove',
     title: 'Image Background Remover',
-    price: '$499/YEAR',
-    priceValue: 499,
     icon: 'ImageMinus',
     category: ToolCategory.IMAGE_EDITING,
     description: 'Instantly remove backgrounds from images with high precision.',
@@ -104,8 +89,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'video-bg-remove',
     title: 'Video Background Remover',
-    price: '$399/YEAR',
-    priceValue: 399,
     icon: 'Video',
     category: ToolCategory.VIDEO,
     description: 'Animate a static image into a video with the background removed/changed.',
@@ -117,8 +100,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'face-cutout',
     title: 'Face Cutout Creator',
-    price: '$699/YEAR',
-    priceValue: 699,
     icon: 'SquareUser',
     category: ToolCategory.IMAGE_EDITING,
     description: 'Isolate faces from group photos for avatars or IDs.',
@@ -130,8 +111,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'photo-enhance',
     title: 'Photo Enhancer',
-    price: '$299/YEAR',
-    priceValue: 299,
     icon: 'Wand2',
     category: ToolCategory.IMAGE_EDITING,
     description: 'Sharpen and upscale blurry or low-res photos.',
@@ -143,8 +122,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'colorize',
     title: 'Photo Colorizer',
-    price: '$399/YEAR',
-    priceValue: 399,
     icon: 'Palette',
     category: ToolCategory.IMAGE_EDITING,
     description: 'Bring black and white photos to life with AI colorization.',
@@ -156,8 +133,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'animer',
     title: 'Photo Animer',
-    price: '$599/YEAR',
-    priceValue: 599,
     icon: 'Film',
     category: ToolCategory.VIDEO,
     description: 'Turn still photos into captivating short videos.',
@@ -169,8 +144,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'color-correct',
     title: 'Photo Color Correction',
-    price: '$249/YEAR',
-    priceValue: 249,
     icon: 'Sun',
     category: ToolCategory.IMAGE_EDITING,
     description: 'Professional color grading and correction.',
@@ -182,8 +155,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'cartoon-selfie',
     title: 'Cartoon Selfie Maker',
-    price: '$499/YEAR',
-    priceValue: 499,
     icon: 'Smile',
     category: ToolCategory.IMAGE_EDITING,
     description: 'Transform your selfies into various cartoon styles.',
@@ -195,8 +166,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'passport',
     title: 'Passport Photo Maker',
-    price: '$199/YEAR',
-    priceValue: 199,
     icon: 'Contact',
     category: ToolCategory.IMAGE_EDITING,
     description: 'Create compliant passport photos from regular selfies.',
@@ -208,8 +177,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'art-gen',
     title: 'AI Art Generation',
-    price: '$999/YEAR',
-    priceValue: 999,
     icon: 'Paintbrush',
     category: ToolCategory.GENERATION,
     description: 'Generate stunning artwork from text descriptions using Imagen 4.0.',
@@ -220,8 +187,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'bg-diffusion',
     title: 'Background Diffusion',
-    price: '$399/YEAR',
-    priceValue: 399,
     icon: 'Layers',
     category: ToolCategory.IMAGE_EDITING,
     description: 'Generate creative, high-quality backgrounds for your products or portraits.',
@@ -234,8 +199,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'reimagine',
     title: 'Reimagine',
-    price: '$1,199/YEAR',
-    priceValue: 1199,
     icon: 'Sparkles',
     category: ToolCategory.GENERATION,
     description: 'Completely reimagine an image or scene using Stable Diffusion techniques.',
@@ -248,8 +211,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'text-remove',
     title: 'Remove Text',
-    price: '$399/YEAR',
-    priceValue: 399,
     icon: 'Eraser',
     category: ToolCategory.IMAGE_EDITING,
     description: 'Cleanly remove text overlays from images.',
@@ -261,8 +222,6 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'replace-bg',
     title: 'Replace Background',
-    price: '$699/YEAR',
-    priceValue: 699,
     icon: 'RefreshCw',
     category: ToolCategory.IMAGE_EDITING,
     description: 'Swap out backgrounds seamlessly with any scene you can describe.',
@@ -276,52 +235,40 @@ const TOOLS: ToolConfig[] = [
   {
     id: 'analysis',
     title: 'Deep Analysis',
-    price: 'INCLUDED',
-    priceValue: 0,
     icon: 'BrainCircuit',
     category: ToolCategory.ANALYSIS,
     description: 'Analyze complex images or videos using Gemini 3 Pro.',
     modelTarget: 'pro-analysis',
     requiresImageInput: true, 
     requiresTextInput: true,
-    isFree: true,
     acceptedFileTypes: 'image/*,video/*'
   },
   {
     id: 'fast-chat',
     title: 'Lightning Chat',
-    price: 'INCLUDED',
-    priceValue: 0,
     icon: 'Zap',
     category: ToolCategory.ANALYSIS,
     description: 'Instant answers and text generation using Flash Lite.',
     modelTarget: 'flash-lite',
     requiresTextInput: true,
-    isFree: true
   },
   {
     id: 'knowledge',
     title: 'Knowledge Engine',
-    price: 'INCLUDED',
-    priceValue: 0,
     icon: 'Globe',
     category: ToolCategory.ANALYSIS,
     description: 'Search the web and maps for up-to-date information.',
     modelTarget: 'search-maps',
     requiresTextInput: true,
-    isFree: true
   },
   {
     id: 'tts-engine',
     title: 'Voice Generator',
-    price: 'INCLUDED',
-    priceValue: 0,
     icon: 'Mic',
     category: ToolCategory.AUDIO,
     description: 'Convert text to lifelike speech.',
     modelTarget: 'tts',
     requiresTextInput: true,
-    isFree: true
   }
 ];
 
@@ -355,8 +302,6 @@ const App: React.FC = () => {
 
   // Modals
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [selectedToolForPurchase, setSelectedToolForPurchase] = useState<ToolConfig | null>(null);
 
   // Auth Form State
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
@@ -399,25 +344,15 @@ const App: React.FC = () => {
   };
 
   const handleToolClick = (tool: ToolConfig) => {
-    // Allow all tools in demo mode or if free
-    if (tool.isFree || isDemoMode) {
+    // All tools are always available in demo mode or when logged in
+    if (isDemoMode || user) {
         setActiveTool(tool);
         setView('workspace');
         return;
     }
 
-    if (!user) {
-        setShowAuthModal(true);
-        return;
-    }
-
-    if (user.purchasedTools.includes(tool.id)) {
-        setActiveTool(tool);
-        setView('workspace');
-    } else {
-        setSelectedToolForPurchase(tool);
-        setShowPaymentModal(true);
-    }
+    // Only show auth modal if not logged in and not in demo mode
+    setShowAuthModal(true);
   };
 
   const handleAuth = (e: React.FormEvent) => {
@@ -458,16 +393,6 @@ const App: React.FC = () => {
     setActiveTool(null);
   };
 
-  const handlePurchase = () => {
-    if (user && selectedToolForPurchase) {
-        const updatedUser = authService.purchaseTool(user.id, selectedToolForPurchase.id);
-        setUser(updatedUser);
-        setShowPaymentModal(false);
-        setActiveTool(selectedToolForPurchase);
-        setView('workspace');
-        setSelectedToolForPurchase(null);
-    }
-  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -776,7 +701,7 @@ const App: React.FC = () => {
                     key={tool.id}
                     tool={tool}
                     onClick={handleToolClick}
-                    isLocked={!tool.isFree && !isDemoMode && (!user || !user.purchasedTools.includes(tool.id))}
+                    isLocked={false}
                 />
               ))}
             </div>
@@ -1231,51 +1156,6 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Payment Modal */}
-      {showPaymentModal && selectedToolForPurchase && (
-         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
-                <div className="p-8 text-center bg-gradient-to-b from-gray-800 to-gray-900">
-                    <div className="w-16 h-16 bg-brand-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-brand-500">
-                        {React.createElement((Icons as any)[selectedToolForPurchase.icon] || Icons.Sparkles, { size: 32 })}
-                    </div>
-                    <h3 className="text-2xl font-bold mb-2">Unlock {selectedToolForPurchase.title}</h3>
-                    <p className="text-gray-400 mb-6">{selectedToolForPurchase.description}</p>
-                    <div className="text-5xl font-bold text-white mb-2">
-                        ${selectedToolForPurchase.priceValue} <span className="text-lg text-gray-500 font-normal">/ year</span>
-                    </div>
-                </div>
-                
-                <div className="p-8 bg-gray-900 space-y-4">
-                    <div className="space-y-3 mb-6">
-                        <div className="flex items-center gap-3 text-gray-300">
-                            <Icons.CircleCheck className="text-green-500 w-5 h-5" />
-                            <span>Unlimited high-quality generations</span>
-                        </div>
-                        <div className="flex items-center gap-3 text-gray-300">
-                            <Icons.CircleCheck className="text-green-500 w-5 h-5" />
-                            <span>Commercial usage rights</span>
-                        </div>
-                        <div className="flex items-center gap-3 text-gray-300">
-                            <Icons.CircleCheck className="text-green-500 w-5 h-5" />
-                            <span>Priority processing speed</span>
-                        </div>
-                    </div>
-
-                    <button onClick={handlePurchase} className="w-full py-4 bg-white text-black rounded-xl font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
-                        <Icons.CreditCard className="w-5 h-5" />
-                        Pay & Unlock Now
-                    </button>
-                    <p className="text-xs text-center text-gray-600 mt-4">
-                        Secure payment processing. This is a demo simulation.
-                    </p>
-                </div>
-                 <button onClick={() => setShowPaymentModal(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white">
-                    <Icons.X size={20} />
-                </button>
-            </div>
-         </div>
-      )}
 
     </div>
   );
