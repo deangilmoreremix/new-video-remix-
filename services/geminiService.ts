@@ -49,8 +49,22 @@ async function decodeAudioData(
 // --- Main Service Class ---
 
 class GeminiService {
-  private getAiClient() {
-    const apiKey = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : '';
+  private async getApiKey(): Promise<string> {
+    const win = window as any;
+    if (win.aistudio && win.aistudio.getSelectedApiKey) {
+      const key = await win.aistudio.getSelectedApiKey();
+      if (key) return key;
+    }
+    const stored = localStorage.getItem('gemini_api_key');
+    if (stored) return stored;
+    return '';
+  }
+
+  private async getAiClient() {
+    const apiKey = await this.getApiKey();
+    if (!apiKey) {
+      throw new Error('No API key configured. Please add your Google AI API key.');
+    }
     return new GoogleGenAI({ apiKey });
   }
 
@@ -59,20 +73,25 @@ class GeminiService {
     if (win.aistudio && win.aistudio.hasSelectedApiKey) {
       return await win.aistudio.hasSelectedApiKey();
     }
-    // Fallback check for env var presence (safe check)
-    return typeof process !== 'undefined' && !!process.env && !!process.env.API_KEY;
+    const stored = localStorage.getItem('gemini_api_key');
+    return !!stored;
   }
 
   async openKeySelection() {
     const win = window as any;
     if (win.aistudio && win.aistudio.openSelectKey) {
       await win.aistudio.openSelectKey();
+    } else {
+      const key = prompt('Enter your Google AI API key:\n\nGet one at: https://aistudio.google.com/apikey');
+      if (key) {
+        localStorage.setItem('gemini_api_key', key);
+      }
     }
   }
 
   // 1. Image Generation (Imagen 4.0)
   async generateImage(prompt: string, aspectRatio: string = '1:1'): Promise<string> {
-    const ai = this.getAiClient();
+    const ai = await this.getAiClient();
     const response = await ai.models.generateImages({
       model: 'imagen-4.0-generate-001',
       prompt: prompt,
@@ -89,7 +108,7 @@ class GeminiService {
 
   // 2. Image Editing (Gemini 2.5 Flash Image - "Nano Banana")
   async editImage(imageBlob: Blob, prompt: string): Promise<string> {
-    const ai = this.getAiClient();
+    const ai = await this.getAiClient();
     const base64Data = await blobToBase64(imageBlob);
     
     const response = await ai.models.generateContent({
@@ -121,7 +140,7 @@ class GeminiService {
 
   // 3. Video Generation (Veo)
   async generateVideo(prompt: string, imageBlob?: Blob, aspectRatio: string = '16:9'): Promise<string> {
-    const ai = this.getAiClient();
+    const ai = await this.getAiClient();
     let operation;
 
     const config = {
@@ -159,7 +178,7 @@ class GeminiService {
     if (!downloadLink) throw new Error("Video generation failed");
 
     // Fetch the actual video bytes
-    const apiKey = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : '';
+    const apiKey = await this.getApiKey();
     const res = await fetch(`${downloadLink}&key=${apiKey}`);
     const videoBlob = await res.blob();
     return URL.createObjectURL(videoBlob);
@@ -167,13 +186,13 @@ class GeminiService {
 
   // 4. Text/Analysis/Grounding (Gemini 2.5 Flash & Pro)
   async generateText(
-    prompt: string, 
+    prompt: string,
     model: 'gemini-3-pro-preview' | 'gemini-2.5-flash' | 'gemini-2.5-flash-lite',
     mediaBlob?: Blob, // Can be image or video
     tools: any[] = [],
     thinking: boolean = false
   ): Promise<string> {
-    const ai = this.getAiClient();
+    const ai = await this.getAiClient();
     const parts: any[] = [];
 
     if (mediaBlob) {
@@ -233,7 +252,7 @@ class GeminiService {
 
   // 5. Text to Speech
   async generateSpeech(text: string): Promise<AudioBuffer> {
-      const ai = this.getAiClient();
+      const ai = await this.getAiClient();
       const response = await ai.models.generateContent({
           model: "gemini-2.5-flash-preview-tts",
           contents: [{ parts: [{ text }] }],

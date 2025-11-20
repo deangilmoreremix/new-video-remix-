@@ -192,11 +192,16 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
     setResult(null);
 
     try {
+      const hasKey = await geminiService.checkApiKey();
+      if (!hasKey) {
+        throw new Error('Please configure your Google AI API key first. Click "Connect Google AI" in the header.');
+      }
+
       let finalPrompt = prompt || selectedFeature.defaultPrompt || '';
       let generatedData: GeneratedContent | null = null;
 
       if (selectedFeature.modelTarget === 'flash-image-edit') {
-        if (!selectedFile) throw new Error('Image required');
+        if (!selectedFile) throw new Error('Please upload an image first');
         const resultUrl = await geminiService.editImage(selectedFile, finalPrompt);
         generatedData = { type: 'image', url: resultUrl };
       } else if (selectedFeature.modelTarget === 'imagen') {
@@ -210,21 +215,22 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
         );
         generatedData = { type: 'video', url: resultUrl };
       } else if (selectedFeature.modelTarget === 'tts') {
+        if (!finalPrompt) throw new Error('Please enter text for speech generation');
         const audioBuffer = await geminiService.generateSpeech(finalPrompt);
-        const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+        const ctx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
         const source = ctx.createBufferSource();
         source.buffer = audioBuffer;
         source.connect(ctx.destination);
         source.start(0);
-        generatedData = { type: 'audio', text: 'Audio generated successfully' };
+        generatedData = { type: 'audio', text: 'Audio generated and playing' };
       }
 
       if (generatedData) {
         setResult(generatedData);
       }
     } catch (error: any) {
-      console.error(error);
-      setResult({ type: 'text', text: `Error: ${error.message || 'Something went wrong'}` });
+      console.error('Generation error:', error);
+      setResult({ type: 'text', text: `Error: ${error.message || 'Something went wrong. Please try again.'}` });
     } finally {
       setIsLoading(false);
     }
@@ -473,22 +479,41 @@ export const VideoEditor: React.FC<VideoEditorProps> = ({ user, isDemoMode }) =>
                   )}
                 </button>
 
-                {result && result.url && (
-                  <button
-                    onClick={() => {
-                      addToTimeline(result);
-                      setResult(null);
-                    }}
-                    className="w-full py-3 bg-green-600 hover:bg-green-500 rounded-xl font-bold flex items-center justify-center gap-2"
-                  >
-                    <Icons.Plus className="w-5 h-5" />
-                    Add to Timeline
-                  </button>
-                )}
+                {result && (
+                  <div className="space-y-3">
+                    {result.url && (
+                      <div className="bg-gray-800 rounded-xl p-3 border border-gray-700">
+                        <p className="text-xs text-green-400 mb-2 flex items-center gap-2">
+                          <Icons.CheckCircle className="w-4 h-4" />
+                          Generated successfully!
+                        </p>
+                        {result.type === 'image' && (
+                          <img src={result.url} alt="Result" className="w-full rounded-lg" />
+                        )}
+                        {result.type === 'video' && (
+                          <video src={result.url} controls className="w-full rounded-lg" />
+                        )}
+                      </div>
+                    )}
 
-                {result && result.type === 'text' && (
-                  <div className="p-4 bg-gray-800 rounded-lg">
-                    <p className="text-sm text-gray-300">{result.text}</p>
+                    {result.url && (
+                      <button
+                        onClick={() => {
+                          addToTimeline(result);
+                          setResult(null);
+                        }}
+                        className="w-full py-3 bg-green-600 hover:bg-green-500 rounded-xl font-bold flex items-center justify-center gap-2 transition-all"
+                      >
+                        <Icons.Plus className="w-5 h-5" />
+                        Add to Timeline
+                      </button>
+                    )}
+
+                    {result.type === 'text' && (
+                      <div className="p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
+                        <p className="text-sm text-red-300">{result.text}</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
